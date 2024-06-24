@@ -31,4 +31,27 @@ app.get('/', async (c) => {
   }
 });
 
+
+app.get('/songs', async (c) => {
+  try {
+    const sql = neon(c.env.DATABASE_URL);
+
+    const db = drizzle(sql);
+
+    const result = await db.select().from(song);
+
+    return c.json({
+      result,
+    });
+  } catch (error) {
+    console.log(error);
+    return c.json(
+      {
+        error,
+      },
+      400
+    );
+  }
+});
+
 export default app;
