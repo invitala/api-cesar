@@ -1,0 +1,1 @@
+ALTER TABLE "assistant" RENAME COLUMN "name" TO "full_name";
