@@ -62,7 +62,7 @@ routes.post('/assistant', async (c) => {
   });
 
 
-routes.delete('/assistant:id', async (c) => {
+routes.delete('/assistant/:id', async (c) => {
     const userId = await c.req.param('id')
 
     try {
@@ -109,15 +109,12 @@ routes.get('/song', async (c) => {
 routes.post('/song', async (c) => {
   const body = await c.req.json()
   
-  console.log('Data recibida:', body);
-  
   const new_song = {
       guest_name: body.guest_name as string,
       song_name: body.song_name as string,
       url: body.url as string
   }
   
-  console.log('Data a enviar a la DB:', new_song);
   try {
     const sql = neon(c.env.DATABASE_URL);
     const db = drizzle(sql);
@@ -137,8 +134,10 @@ routes.post('/song', async (c) => {
 });
 
 
-routes.delete('/song:id', async (c) => {
+routes.delete('/song/:id', async (c) => {
   const userId = await c.req.param('id')
+
+  console.log("id: ", userId)
 
   try {
     const sql = neon(c.env.DATABASE_URL);
