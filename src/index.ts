@@ -2,6 +2,7 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
 import { assistant, song } from './db/schema';
 import { Hono } from 'hono';
+import { eq } from 'drizzle-orm';
 
 export type Env = {
   DATABASE_URL: string;
