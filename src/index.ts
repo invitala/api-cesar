@@ -3,17 +3,30 @@ import { neon } from '@neondatabase/serverless';
 import { assistant, song } from './db/schema';
 import { Hono } from 'hono';
 import { eq } from 'drizzle-orm';
+import { cors } from 'hono/cors'
 
 export type Env = {
   DATABASE_URL: string;
 };
 
+
 const routes = new Hono<{ Bindings: Env }>();
 
+routes.use(
+  '/api/*',
+  cors({
+    origin: ['http://localhost:3000', 'https://invita.la'],
+    allowHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests'],
+    allowMethods: ['POST', 'GET', 'OPTIONS'],
+    exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
+    maxAge: 600,
+    credentials: true,
+  })
+)
 
-//------------ songs api -------------------
+//------------ assistant api -------------------
 
-routes.get('/assistant', async (c) => {
+routes.get('/api/assistant', async (c) => {
   try {
     const sql = neon(c.env.DATABASE_URL);
     const db = drizzle(sql);
@@ -34,7 +47,7 @@ routes.get('/assistant', async (c) => {
   }
 });
 
-routes.post('/assistant', async (c) => {
+routes.post('/api/assistant', async (c) => {
     const body = await c.req.json()
     const new_assitant = {
         full_name: body.full_name as string,
@@ -63,7 +76,7 @@ routes.post('/assistant', async (c) => {
   });
 
 
-routes.delete('/assistant/:id', async (c) => {
+routes.delete('/api/assistant/:id', async (c) => {
     const userId = await c.req.param('id')
 
     try {
@@ -86,7 +99,7 @@ routes.delete('/assistant/:id', async (c) => {
 
 //------------ songs api -------------------
 
-routes.get('/song', async (c) => {
+routes.get('/api/song', async (c) => {
   try {
     const sql = neon(c.env.DATABASE_URL);
     const db = drizzle(sql);
@@ -107,7 +120,7 @@ routes.get('/song', async (c) => {
   }
 });
 
-routes.post('/song', async (c) => {
+routes.post('/api/song', async (c) => {
   const body = await c.req.json()
   
   const new_song = {
@@ -135,7 +148,7 @@ routes.post('/song', async (c) => {
 });
 
 
-routes.delete('/song/:id', async (c) => {
+routes.delete('/api/song/:id', async (c) => {
   const userId = await c.req.param('id')
 
   console.log("id: ", userId)
