@@ -12,17 +12,17 @@ export type Env = {
 
 const routes = new Hono<{ Bindings: Env }>();
 
-// routes.use(
-//   '/api/*',
-//   cors({
-//     origin: ['http://localhost:3000', 'https://invita.la'],
-//     allowHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests'],
-//     allowMethods: ['POST', 'GET', 'OPTIONS'],
-//     exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
-//     maxAge: 600,
-//     credentials: true,
-//   })
-// )
+routes.use(
+  '/api/*',
+  cors({
+    origin: '*',
+    allowHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests'],
+    allowMethods: ['POST', 'GET', 'OPTIONS'],
+    exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
+    maxAge: 600,
+    credentials: true,
+  })
+)
 
 //------------ assistant api -------------------
 
