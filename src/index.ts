@@ -13,16 +13,20 @@ export type Env = {
 const routes = new Hono<{ Bindings: Env }>();
 
 routes.use(
-  '/api/*',
+  '*',
   cors({
     origin: '*',
-    allowHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests'],
-    allowMethods: ['POST', 'GET', 'OPTIONS'],
-    exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
+    allowHeaders: ['Content-Type', 'Origin', 'X-Custom-Header', 'Upgrade-Insecure-Requests'],
+    allowMethods: ['POST', 'GET'],
+    exposeHeaders: ['Content-Length'],
     maxAge: 600,
     credentials: true,
   })
 )
+
+routes.options('*', (c) => {
+  return c.text('hello bitch', 204)
+})
 
 //------------ assistant api -------------------
 
